@@ -6,7 +6,7 @@ import { themedStyles } from '../../constants/themedStyles';
 import { t } from '../../i18n/t';
 import type { Offer } from '../../utils/offers';
 import { IconButton } from '../IconButton';
-import { OfferSlide } from './OfferSlide';
+import { OfferPoster } from '../showroom/OfferPoster';
 
 interface OfferPreviewProps {
   offer: Offer | null;
@@ -29,7 +29,7 @@ export const OfferPreview: React.FC<OfferPreviewProps> = ({
     >
       <View style={styles.page}>
         {offer ? (
-          <OfferSlide offer={offer} width={width} height={height} active />
+          <OfferPoster offer={offer} width={width} height={height} />
         ) : null}
         <View style={[styles.close, { top: insets.top + 24 }]}>
           <IconButton
@@ -45,6 +45,6 @@ export const OfferPreview: React.FC<OfferPreviewProps> = ({
 };
 
 const styles = themedStyles(() => ({
-  page: { flex: 1, backgroundColor: OFFER.ground },
+  page: { flex: 1, justifyContent: 'center', backgroundColor: OFFER.ground },
   close: { position: 'absolute', right: 24 },
 }));

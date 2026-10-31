@@ -9,11 +9,15 @@
  * - An offer is about what is on the screen right now, so it cuts in. A welcome
  *   line it cuts off is said again, whole, a pause after the offer ends; one that
  *   falls due while an offer is being read waits for it the same way.
+ * - Held while a customer is exploring the showroom themselves: what is being said
+ *   is finished, nothing new is begun, and no offer is read. A welcome line that
+ *   fell due meanwhile is said a pause after the hold is let go.
  * - Cancelling drops everything still to come, including an end reported late.
  */
 export interface Narrator {
   start: () => void;
   announce: (text: string) => void;
+  hold: (on: boolean) => void;
   cancel: () => void;
 }
 
@@ -38,8 +42,9 @@ export function createNarrator(
   let utterance = 0;
   let speaking: 'welcome' | 'offer' | null = null;
   let next = 0;
-  // A welcome line waiting for an offer to end.
+  // A welcome line waiting for an offer, or the hold, to end.
   let due = false;
+  let held = false;
 
   const after = (ms: number, then: () => void): void => {
     clearTimeout(timer);
@@ -66,7 +71,7 @@ export function createNarrator(
 
   const welcome = (): void => {
     if (cancelled || !lines.length) return;
-    if (speaking) {
+    if (speaking || held) {
       due = true;
       return;
     }
@@ -85,17 +90,25 @@ export function createNarrator(
     start: () => {
       cancelled = false;
       next = 0;
-      due = false;
+      due = held;
       welcome();
     },
     announce: (text) => {
       if (cancelled || !text) return;
       if (speaking === 'welcome') due = true;
+      if (held) return;
       say('offer', text, () => {
-        if (!due) return;
+        if (!due || held) return;
         due = false;
         after(pauseMs, welcome);
       });
+    },
+    hold: (on) => {
+      if (on === held) return;
+      held = on;
+      if (held || cancelled || speaking || !due) return;
+      due = false;
+      after(pauseMs, welcome);
     },
     cancel: () => {
       cancelled = true;

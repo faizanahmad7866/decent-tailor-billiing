@@ -361,53 +361,99 @@ saved copy, as a new file: the old one stays until the form is saved.
 
 ## Showroom mode
 
-**Patterns → Showroom** hands the phone or tablet to a customer: the designs full
-screen in midnight and champagne gold, with the tabs, header, bills and totals out of reach
-(`screens/ShowroomScreen.tsx`, `pattern/DesignSlide.tsx`; its colours are `SHOWROOM` in
-`theme.ts`, the same in both modes). The setup page chooses the categories (all ticked to
-start), whether prices show (off to start), whether it welcomes the customer aloud
-(off to start), and the 4-digit PIN (`storage/showroomPinStore.ts`). Only designs
-with a photo are shown. Categories take
-turns, one design each, newest first (`utils/showroom.ts`).
+**Patterns → Showroom** hands the phone or tablet to a customer as a kiosk they use
+themselves, with the tabs, header, bills and totals out of reach
+(`screens/ShowroomScreen.tsx`, `components/showroom/`). The setup page chooses the
+categories (all ticked to start), whether prices show (off to start), whether it
+speaks (off to start), the offers, and the 4-digit PIN (`storage/showroomPinStore.ts`).
+Only designs with a photo are shown.
 
-It opens on the shop's gold logo and tagline (`pattern/ShowroomIntro.tsx`, a tap skips it). Each
-design stands in a warm light, a band of gold light crosses it now and then (`pattern/Sheen.tsx`), drifts slowly closer, and fades through up to 3 of its photos,
-for 5 seconds, or 7.5 with 3 photos. The words come in one by one, a hairline shows the
-time left, and the next slide glides in over about a second, its neighbours smaller and
-dimmer. After the last, it goes through black to the first. On a screen on its side the
-words stand beside the photo.
+**The look** is an atelier lit at night, the same in both modes (`SHOWROOM` in
+`theme.ts`): a warm black, ivory words, and the logo's gold kept for a price, the tab
+chosen and a design kept. A design's name is set in a Garamond (Cormorant Garamond,
+`SERIF`), everything read rather than looked at in Inter, and a large figure in Inter
+Light. Every photo stands on a **mat** of warm paper (`showroom/MatPhoto.tsx`), whole,
+never cropped, and multiplied into it, so the white of a photo taken against a wall
+becomes the mat and every design stands on the same ground however it was photographed
+(Android 10 and up; older phones show the photo plain on the mat). Motion is slow and
+eased — things fade and settle, nothing bounces, glows or sparkles — and follows the
+phone's Reduce motion. The showroom's faces load when its setup page opens, not at
+every start of the app (`showroom/useShowroomFonts.ts`).
 
-A finger moves the slides, a tab narrows them to one category, and a tap opens that
-design's photos in 3D, holding the slideshow until closed. The back button asks for the
-PIN and leaves once it is right; holding the logo in the corner for 2 seconds does the
-same, for a device with no back button. The screen stays awake (`expo-keep-awake`, a
-native module, so it needed a new build). Android's Home button cannot be stopped from
-inside an app: **Screen pinning** in the phone's settings does that. The showroom is not
-remembered, so closing the app also ends it.
+It opens on the gold logo, a line drawn under it and the shop's motto in italic
+(`showroom/ShowroomIntro.tsx`, a tap skips it), then:
+
+1. **The loop** (`showroom/AttractView.tsx`), while no one is using it: one design at a
+   time, its photo large on the mat, drifting slowly closer and fading through up to 3
+   of its photos, its category, name, Hindi and price coming in line by line beside or
+   under it — 6.5 seconds, or 9 with 3 photos (`utils/showroom.ts`). Categories take
+   turns, one design each, newest first. A hairline counts down to the next, which
+   comes in through a slow cross-fade. One button, **Touch to explore**, opens the
+   collection; a touch on a design opens that design.
+2. **The collection** (`showroom/BrowseView.tsx`): every design as a lookbook page in a
+   grid (2 to a row on a phone, 3 or 4 on a tablet), the photo on its mat with a count of
+   its photos, the name in the serif, its Hindi, and the price where prices show. Tabs
+   narrow it to one category, with their counts; where prices show it sorts newest
+   first, lowest price or highest price (`utils/showroomBrowse.ts`). The offers running
+   lead it, as cards.
+3. **A design** (`showroom/DesignDetail.tsx`): its photos large to swipe, with a small one
+   of each to jump to, and **See in 3D** (the 3D stage, in the showroom's colours); the
+   name; and the price **laid open** — each cloth's meters at its rate, and the
+   stitching, adding up to the price (`showroom/PriceBreakdown.tsx`). **Choose the
+   fabric** offers each cloth in every type it comes in, cheapest first, with its rate
+   per meter, the tailor's own marked "As shown"; choosing one prices the design in it
+   at once (`utils/showroomPricing.ts`: the type's rate plus the design's extra on that
+   cloth, as the catalogue works out the design's own, so the tailor's choice comes to
+   the design's price to the paisa; a reduction that would take a type to ₹0 drops it).
+   The price stays in the bar at the foot while the fabric is chosen. The tailor's note,
+   and **More in** the same category, follow. With prices off, the page says to ask at
+   the counter and the fabrics show without rates. "The tailor confirms the final price
+   for your size" sits under every price.
+4. **My picks** (`showroom/PicksPanel.tsx`): the heart on a design, or **Add to my
+   picks**, keeps it — in the fabric chosen, which the pick follows if it changes. The
+   panel (from the side on a tablet, from below on a phone) lists them with their
+   photo, fabric and price, what they come to together, and "Show this list to the
+   tailor at the counter".
+
+**Idle** (`utils/showroomIdle.ts`): 80 seconds after the last touch while a customer is
+exploring, **Still looking?** counts down 10 seconds; any touch answers it. If no one
+does, the showroom starts over for the next customer — back to the loop, picks cleared,
+category and order put back. It does not count while the 3D view or the PIN box is open.
+
+The back button steps back — the picks, then the design, then the collection to the
+loop — and on the loop asks for the PIN, leaving once it is right; holding the logo for
+2 seconds does the same anywhere, for a device with no back button (a tap on it in the
+collection goes back to the loop). The screen stays awake (`expo-keep-awake`).
+Android's Home button cannot be stopped from inside an app: **Screen pinning** in the
+phone's settings does that. The showroom is not remembered, so closing the app also
+ends it.
 
 **Voice** (on the same setup page, beside Price, and like it chosen afresh each time):
 as the showroom opens it says “डीसेंट टेलर में आपका स्वागत है”, and 3 seconds after that
 line ends, “यह हमारा कैटलॉग है, इसमें आप सारे डिज़ाइन देख सकते हैं” — and says both again
-2 minutes after the second ends, for as long as the showroom runs, so a customer who
-walks up later is welcomed too. As an offer's poster comes up it is read out: the
-occasion, the offer, its line and its last day — “ईद ऑफर। 10 परसेंट डिस्काउंट। ऑन ऑल
-जोधपुरी सूट्स। यह ऑफर 15 नवंबर तक है” (`voice/spokenOffer.ts`: offer words, ₹ and %
-put into Devanagari to be said as the counter says them, not translated; “today” and
-“tomorrow” for the last two days). It is one voice (`voice/narrator.ts`): an offer cuts
-in, since it is about what is on screen, and a welcome line it cuts off is said again
-whole 3 seconds after; the 2-minute round keeps its time. The slides never wait for it.
-It is the same phone voice as the bill's (`expo-speech`, `hi-IN`, through
+2 minutes after the second ends, so a customer who walks up later is welcomed too. As
+an offer's poster comes up in the loop it is read out: the occasion, the offer, its
+line and its last day — “ईद ऑफर। 10 परसेंट डिस्काउंट। ऑन ऑल जोधपुरी सूट्स। यह ऑफर 15
+नवंबर तक है” (`voice/spokenOffer.ts`: offer words, ₹ and % put into Devanagari to be
+said as the counter says them, not translated; “today” and “tomorrow” for the last two
+days). It is one voice (`voice/narrator.ts`): an offer cuts in, since it is about what
+is on screen, and a welcome line it cuts off is said again whole 3 seconds after; the
+2-minute round keeps its time. While a customer is exploring the collection it is
+**held**: the line being said finishes, nothing new begins and no offer is read, and a
+welcome that fell due is said 3 seconds after they leave. The slides never wait for
+it. It is the same phone voice as the bill's (`expo-speech`, `hi-IN`, through
 `voice/useShowroomVoice.ts`), but follows this switch alone, not Settings → Voice.
 Leaving the showroom stops it mid-word and drops whatever was still to come; a tap
 that skips the intro does not.
 
-**Offers** (on the same setup page, up to 3) run in the showroom as posters between the
-designs, one after every 4, for 7 seconds (`utils/offers.ts`, `pattern/OfferSlide.tsx`):
-the occasion, the offer set very large, a small line, and the days left. Each has its
-own icon, on/off and last day, and stops by itself after that day. They are saved on the
-phone (`storage/offerStore.ts`), not in a backup. An offer is only for reading: it does
-not change what a bill comes to. Its colours are `OFFER` in `theme.ts`, the same in both
-modes, since a poster should look the same on any phone.
+**Offers** (on the same setup page, up to 3) run in the loop as posters between the
+designs, one after every 4, for 8 seconds, and lead the collection as cards
+(`utils/offers.ts`, `showroom/OfferPoster.tsx`, `showroom/OfferBanner.tsx`): set in
+type — the occasion, the offer very large in the serif, a small line, until when and
+the days left — under a thin ring holding the offer's icon. Each has its own icon,
+on/off and last day, and stops by itself after that day. They are saved on the phone
+(`storage/offerStore.ts`), not in a backup. An offer is only for reading: it does not
+change what a bill comes to.
 
 ## Hindi and dark mode
 

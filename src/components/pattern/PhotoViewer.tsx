@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, FONT, RADIUS } from '../../constants/theme';
+import { COLORS, FONT, RADIUS, SERIF, SHOWROOM } from '../../constants/theme';
 import { themedStyles } from '../../constants/themedStyles';
 import { t } from '../../i18n/t';
 import { patternMediaUri } from '../../storage/patternMediaStore';
@@ -29,6 +29,8 @@ interface PhotoViewerProps {
   title: string;
   /** The colour behind the photos, where it is not the app's own dark. */
   ground?: string;
+  /** In the showroom: its ground, its serif, and its quiet buttons. */
+  tone?: 'app' | 'showroom';
   /** Called with the photo being looked at when the viewer is closed. */
   onClose: (index: number) => void;
 }
@@ -55,8 +57,10 @@ export const PhotoViewer: React.FC<PhotoViewerProps> = ({
   startIndex,
   title,
   ground,
+  tone = 'app',
   onClose,
 }) => {
+  const showroom = tone === 'showroom';
   const insets = useSafeAreaInsets();
   const [area, setArea] = useState<Area>({ width: 0, height: 0 });
   const [index, setIndex] = useState(startIndex);
@@ -99,12 +103,16 @@ export const PhotoViewer: React.FC<PhotoViewerProps> = ({
         style={[
           styles.page,
           ground ? { backgroundColor: ground } : null,
+          showroom && styles.showroomPage,
           { paddingTop: insets.top, paddingBottom: insets.bottom },
         ]}
       >
         <View style={styles.top}>
           <View style={styles.titleBlock}>
-            <Text numberOfLines={1} style={styles.title}>
+            <Text
+              numberOfLines={1}
+              style={[styles.title, showroom && styles.showroomTitle]}
+            >
               {title}
             </Text>
             {images.length > 1 ? (
@@ -154,14 +162,16 @@ export const PhotoViewer: React.FC<PhotoViewerProps> = ({
           <Tap
             onPress={() => setZoomed((now) => !now)}
             accessibilityLabel={zoomed ? t('Zoom out') : t('Zoom in')}
-            style={styles.zoom}
+            style={[styles.zoom, showroom && styles.showroomZoom]}
           >
             <Ionicons
               name={zoomed ? 'remove' : 'add'}
               size={20}
-              color={COLORS.onPrimary}
+              color={showroom ? SHOWROOM.text : COLORS.onPrimary}
             />
-            <Text style={styles.zoomLabel}>
+            <Text
+              style={[styles.zoomLabel, showroom && styles.showroomZoomLabel]}
+            >
               {zoomed ? t('Zoom out') : t('Zoom in')}
             </Text>
           </Tap>
@@ -282,4 +292,13 @@ const styles = themedStyles(() => ({
     fontSize: 15,
     color: COLORS.onPrimary,
   },
+  showroomPage: { backgroundColor: SHOWROOM.ground },
+  showroomTitle: { fontFamily: SERIF.semibold, fontSize: 24 },
+  showroomZoom: {
+    borderRadius: 2,
+    borderWidth: 1,
+    borderColor: SHOWROOM.lineStrong,
+    backgroundColor: 'transparent',
+  },
+  showroomZoomLabel: { fontFamily: FONT.medium, color: SHOWROOM.text },
 }));

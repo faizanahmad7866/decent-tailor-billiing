@@ -134,4 +134,56 @@ describe('createNarrator', () => {
     jest.advanceTimersByTime(600000);
     expect(voice.said()).toEqual([LINES[0]]);
   });
+
+  it('finishes the line it is saying when held, and begins nothing new', () => {
+    const voice = fakeVoice();
+    const narrator = createNarrator(LINES, voice.say, TIMING);
+    narrator.start();
+    narrator.hold(true);
+    voice.end();
+    jest.advanceTimersByTime(600000);
+    narrator.announce('ईद ऑफर');
+    expect(voice.said()).toEqual([LINES[0]]);
+  });
+
+  it('says the line that fell due a pause after the hold is let go', () => {
+    const voice = fakeVoice();
+    const narrator = createNarrator(LINES, voice.say, TIMING);
+    narrator.start();
+    narrator.hold(true);
+    voice.end();
+    jest.advanceTimersByTime(60000);
+    narrator.hold(false);
+    jest.advanceTimersByTime(2999);
+    expect(voice.said()).toEqual([LINES[0]]);
+    jest.advanceTimersByTime(1);
+    expect(voice.said()).toEqual(LINES);
+  });
+
+  it('keeps the round’s time when nothing fell due during the hold', () => {
+    const voice = fakeVoice();
+    const narrator = createNarrator(LINES, voice.say, TIMING);
+    narrator.start();
+    voice.end();
+    jest.advanceTimersByTime(3000);
+    voice.end();
+    narrator.hold(true);
+    jest.advanceTimersByTime(10000);
+    narrator.hold(false);
+    jest.advanceTimersByTime(109999);
+    expect(voice.said()).toHaveLength(2);
+    jest.advanceTimersByTime(1);
+    expect(voice.said()).toHaveLength(3);
+  });
+
+  it('waits for the hold to end before a welcome started while held', () => {
+    const voice = fakeVoice();
+    const narrator = createNarrator(LINES, voice.say, TIMING);
+    narrator.hold(true);
+    narrator.start();
+    expect(voice.said()).toEqual([]);
+    narrator.hold(false);
+    jest.advanceTimersByTime(3000);
+    expect(voice.said()).toEqual([LINES[0]]);
+  });
 });
