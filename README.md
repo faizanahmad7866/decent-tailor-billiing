@@ -365,8 +365,9 @@ saved copy, as a new file: the old one stays until the form is saved.
 screen in midnight and champagne gold, with the tabs, header, bills and totals out of reach
 (`screens/ShowroomScreen.tsx`, `pattern/DesignSlide.tsx`; its colours are `SHOWROOM` in
 `theme.ts`, the same in both modes). The setup page chooses the categories (all ticked to
-start), whether prices show (off to start), and the 4-digit PIN
-(`storage/showroomPinStore.ts`). Only designs with a photo are shown. Categories take
+start), whether prices show (off to start), whether it welcomes the customer aloud
+(off to start), and the 4-digit PIN (`storage/showroomPinStore.ts`). Only designs
+with a photo are shown. Categories take
 turns, one design each, newest first (`utils/showroom.ts`).
 
 It opens on the shop's gold logo and tagline (`pattern/ShowroomIntro.tsx`, a tap skips it). Each
@@ -383,6 +384,14 @@ same, for a device with no back button. The screen stays awake (`expo-keep-awake
 native module, so it needed a new build). Android's Home button cannot be stopped from
 inside an app: **Screen pinning** in the phone's settings does that. The showroom is not
 remembered, so closing the app also ends it.
+
+**Voice** (on the same setup page, beside Price, and like it chosen afresh each time):
+as the showroom opens it says “डीसेंट टेलर में आपका स्वागत है”, and 3 seconds after that
+line ends, “यह हमारा कैटलॉग है, इसमें आप सारे डिज़ाइन देख सकते हैं”
+(`voice/useShowroomWelcome.ts`, `voice/welcome.ts`, the lines in `voice/spokenText.ts`).
+It is the same phone voice as the bill's (`expo-speech`, `hi-IN`), but follows this
+switch alone, not Settings → Voice. Leaving the showroom stops it mid-word and drops
+the line still to come; a tap that skips the intro does not.
 
 **Offers** (on the same setup page, up to 3) run in the showroom as posters between the
 designs, one after every 4, for 7 seconds (`utils/offers.ts`, `pattern/OfferSlide.tsx`):

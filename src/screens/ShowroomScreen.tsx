@@ -59,6 +59,7 @@ import {
   showroomSlideMs,
   showroomSlides,
 } from '../utils/showroom';
+import { useShowroomWelcome } from '../voice/useShowroomWelcome';
 
 const logo = require('../../assets/brand/logo-gold.png');
 const logoSource = Image.resolveAssetSource(logo);
@@ -94,7 +95,8 @@ export const ShowroomScreen: React.FC<RootScreenProps<'Showroom'>> = ({
   route,
 }) => {
   useKeepAwake();
-  const { categoryIds, showPrice, pin } = route.params;
+  const { categoryIds, showPrice, voice, pin } = route.params;
+  useShowroomWelcome(voice);
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const list = useAnimatedRef<FlatList<Slide>>();

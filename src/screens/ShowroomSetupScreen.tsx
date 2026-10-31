@@ -64,6 +64,28 @@ const CheckRow: React.FC<{
   </Tap>
 );
 
+/** A setting for this showroom: what it does, a line on what it means, a switch. */
+const SwitchRow: React.FC<{
+  title: string;
+  note: string;
+  value: boolean;
+  onChange: (on: boolean) => void;
+}> = ({ title, note, value, onChange }) => (
+  <View style={styles.switchRow}>
+    <View style={styles.switchText}>
+      <Text style={styles.switchTitle}>{title}</Text>
+      <Text style={styles.switchNote}>{note}</Text>
+    </View>
+    <Switch
+      value={value}
+      onValueChange={onChange}
+      trackColor={{ false: COLORS.borderStrong, true: COLORS.primary }}
+      thumbColor="#FFFFFF"
+      accessibilityLabel={title}
+    />
+  </View>
+);
+
 const OfferRow: React.FC<{
   offer: Offer;
   onEdit: () => void;
@@ -108,8 +130,9 @@ const OfferRow: React.FC<{
 };
 
 /**
- * Before the showroom opens: what to show, whether to show prices, the offers to
- * run among the designs, and the PIN that leaves it. Every category starts ticked and prices start off, each time,
+ * Before the showroom opens: what to show, whether to show prices, whether to greet
+ * the customer aloud, the offers to run among the designs, and the PIN that leaves
+ * it. Every category starts ticked and prices and the voice start off, each time,
  * since what suits one customer may not suit the next. Only designs with a photo
  * count: a slide with no picture has nothing to show.
  */
@@ -121,6 +144,7 @@ export const ShowroomSetupScreen: React.FC<
   const [loadFailed, setLoadFailed] = useState(false);
   const [chosen, setChosen] = useState<number[]>([]);
   const [showPrice, setShowPrice] = useState(false);
+  const [voice, setVoice] = useState(false);
   const [pin, setPin] = useState(loadShowroomPin);
   const [submitted, setSubmitted] = useState(false);
   const [offers, setOffers] = useState<Offer[]>(loadOffers);
@@ -230,7 +254,12 @@ export const ShowroomSetupScreen: React.FC<
     } catch {
       // Not remembered: it still works for this showroom, and is asked for again.
     }
-    navigation.navigate('Showroom', { categoryIds: chosen, showPrice, pin });
+    navigation.navigate('Showroom', {
+      categoryIds: chosen,
+      showPrice,
+      voice,
+      pin,
+    });
   };
 
   return (
@@ -268,26 +297,25 @@ export const ShowroomSetupScreen: React.FC<
           </Section>
 
           <Section title={t('Price')}>
-            <View style={styles.switchRow}>
-              <View style={styles.switchText}>
-                <Text style={styles.switchTitle}>{t('Show the price')}</Text>
-                <Text style={styles.switchNote}>
-                  {t(
-                    'Off: the customer sees the designs, and you tell the price'
-                  )}
-                </Text>
-              </View>
-              <Switch
-                value={showPrice}
-                onValueChange={setShowPrice}
-                trackColor={{
-                  false: COLORS.borderStrong,
-                  true: COLORS.primary,
-                }}
-                thumbColor="#FFFFFF"
-                accessibilityLabel={t('Show the price')}
-              />
-            </View>
+            <SwitchRow
+              title={t('Show the price')}
+              note={t(
+                'Off: the customer sees the designs, and you tell the price'
+              )}
+              value={showPrice}
+              onChange={setShowPrice}
+            />
+          </Section>
+
+          <Section title={t('Voice')}>
+            <SwitchRow
+              title={t('Welcome the customer')}
+              note={t(
+                'Says “Welcome to Decent Tailor”, then that this is the catalogue'
+              )}
+              value={voice}
+              onChange={setVoice}
+            />
           </Section>
 
           <Section

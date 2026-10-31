@@ -67,6 +67,17 @@ describe('voice', () => {
     expect(speech.speak).not.toHaveBeenCalled();
   });
 
+  it('speaks for a screen with its own switch, even while switched off', () => {
+    const { voice, speech } = fresh(false);
+    const onDone = jest.fn();
+    voice.speakAlways('स्वागत है', onDone);
+    expect(speech.speak).toHaveBeenCalledWith('स्वागत है', {
+      language: 'hi-IN',
+      rate: 0.95,
+      onDone,
+    });
+  });
+
   it('keeps going if the voice cannot speak', () => {
     const { voice, speech } = fresh(true);
     (speech.speak as jest.Mock).mockImplementationOnce(() => {

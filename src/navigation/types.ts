@@ -42,7 +42,13 @@ export type RootStackParamList = {
   /** Before the showroom: what to show, prices, and the PIN that leaves it. */
   ShowroomSetup: undefined;
   /** The designs of these categories, full screen, for a customer to look through. */
-  Showroom: { categoryIds: number[]; showPrice: boolean; pin: string };
+  Showroom: {
+    categoryIds: number[];
+    showPrice: boolean;
+    /** Greet the customer aloud as it opens. */
+    voice: boolean;
+    pin: string;
+  };
   RateMaster: undefined;
   /** Settings → Analytics: which cloth sold how much. */
   Analytics: undefined;
