@@ -388,10 +388,12 @@ remembered, so closing the app also ends it.
 **Voice** (on the same setup page, beside Price, and like it chosen afresh each time):
 as the showroom opens it says “डीसेंट टेलर में आपका स्वागत है”, and 3 seconds after that
 line ends, “यह हमारा कैटलॉग है, इसमें आप सारे डिज़ाइन देख सकते हैं”
+— and says both again a minute after the second ends, for as long as the showroom
+runs, so a customer who walks up later is welcomed too
 (`voice/useShowroomWelcome.ts`, `voice/welcome.ts`, the lines in `voice/spokenText.ts`).
 It is the same phone voice as the bill's (`expo-speech`, `hi-IN`), but follows this
 switch alone, not Settings → Voice. Leaving the showroom stops it mid-word and drops
-the line still to come; a tap that skips the intro does not.
+the line or round still to come; a tap that skips the intro does not.
 
 **Offers** (on the same setup page, up to 3) run in the showroom as posters between the
 designs, one after every 4, for 7 seconds (`utils/offers.ts`, `pattern/OfferSlide.tsx`):

@@ -721,8 +721,8 @@ export const HINDI: Record<string, string> = {
   'Off: the customer sees the designs, and you tell the price':
     'बंद: ग्राहक डिज़ाइन देखेगा, कीमत आप बताएंगे',
   'Welcome the customer': 'ग्राहक का स्वागत करें',
-  'Says “Welcome to Decent Tailor”, then that this is the catalogue':
-    'बोलेगा “डीसेंट टेलर में आपका स्वागत है”, फिर बताएगा कि यह कैटलॉग है',
+  'Says “Welcome to Decent Tailor” and that this is the catalogue, again every minute':
+    'बोलेगा “डीसेंट टेलर में आपका स्वागत है” और बताएगा कि यह कैटलॉग है, हर मिनट दोबारा',
   'Leaving the showroom': 'शोरूम से बाहर निकलना',
   '{0}-digit PIN': '{0} अंकों का PIN',
   'Enter a {0}-digit PIN': '{0} अंकों का PIN लिखें',

@@ -311,7 +311,7 @@ export const ShowroomSetupScreen: React.FC<
             <SwitchRow
               title={t('Welcome the customer')}
               note={t(
-                'Says “Welcome to Decent Tailor”, then that this is the catalogue'
+                'Says “Welcome to Decent Tailor” and that this is the catalogue, again every minute'
               )}
               value={voice}
               onChange={setVoice}

@@ -20,7 +20,7 @@ describe('createWelcome', () => {
 
   it('says the greeting at once, then the next line 3 s after it ends', () => {
     const voice = fakeVoice();
-    const welcome = createWelcome(LINES, voice.say, 3000);
+    const welcome = createWelcome(LINES, voice.say, { pauseMs: 3000 });
     welcome.start();
     expect(voice.say).toHaveBeenCalledTimes(1);
     expect(voice.say).toHaveBeenLastCalledWith(
@@ -50,7 +50,7 @@ describe('createWelcome', () => {
 
   it('drops the next line when cancelled during the pause', () => {
     const voice = fakeVoice();
-    const welcome = createWelcome(LINES, voice.say, 3000);
+    const welcome = createWelcome(LINES, voice.say, { pauseMs: 3000 });
     welcome.start();
     voice.finish();
     welcome.cancel();
@@ -60,7 +60,7 @@ describe('createWelcome', () => {
 
   it('ignores a line reported done after it was cancelled', () => {
     const voice = fakeVoice();
-    const welcome = createWelcome(LINES, voice.say, 3000);
+    const welcome = createWelcome(LINES, voice.say, { pauseMs: 3000 });
     welcome.start();
     welcome.cancel();
     voice.finish();
@@ -70,7 +70,50 @@ describe('createWelcome', () => {
 
   it('says nothing for no lines', () => {
     const voice = fakeVoice();
-    createWelcome([], voice.say, 3000).start();
+    createWelcome([], voice.say, { pauseMs: 3000 }).start();
     expect(voice.say).not.toHaveBeenCalled();
+  });
+
+  it('says the whole welcome again a minute after it ends, and on', () => {
+    const voice = fakeVoice();
+    const welcome = createWelcome(LINES, voice.say, {
+      pauseMs: 3000,
+      repeatMs: 60000,
+    });
+    welcome.start();
+    voice.finish();
+    jest.advanceTimersByTime(3000);
+    voice.finish();
+    expect(voice.say).toHaveBeenCalledTimes(2);
+
+    jest.advanceTimersByTime(59999);
+    expect(voice.say).toHaveBeenCalledTimes(2);
+    jest.advanceTimersByTime(1);
+    expect(voice.say).toHaveBeenCalledTimes(3);
+    expect(voice.say).toHaveBeenLastCalledWith(
+      'स्वागत है',
+      expect.any(Function)
+    );
+
+    voice.finish();
+    jest.advanceTimersByTime(3000);
+    voice.finish();
+    jest.advanceTimersByTime(60000);
+    expect(voice.say).toHaveBeenCalledTimes(5);
+  });
+
+  it('does not come round again once cancelled', () => {
+    const voice = fakeVoice();
+    const welcome = createWelcome(LINES, voice.say, {
+      pauseMs: 3000,
+      repeatMs: 60000,
+    });
+    welcome.start();
+    voice.finish();
+    jest.advanceTimersByTime(3000);
+    voice.finish();
+    welcome.cancel();
+    jest.advanceTimersByTime(120000);
+    expect(voice.say).toHaveBeenCalledTimes(2);
   });
 });
