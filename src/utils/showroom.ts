@@ -4,8 +4,9 @@
 /** The most of a design's photos that fade through on its slide. */
 export const SHOWROOM_PHOTOS_SHOWN = 3;
 
-const SLIDE_MS = 5000;
-const MS_PER_PHOTO = 2500;
+// Slow enough to be looked at from across the counter, as a window is.
+const SLIDE_MS = 6500;
+const MS_PER_PHOTO = 3000;
 
 /**
  * When, on a slide, each fade to the next photo starts: so that every photo has its
@@ -28,11 +29,14 @@ export const showroomSlideMs = (photoCount: number): number =>
     Math.min(photoCount, SHOWROOM_PHOTOS_SHOWN) * MS_PER_PHOTO
   );
 
-/** How large to set a design's name: a long one smaller, to stay within its lines. */
+/**
+ * How large to set a design's name in the serif: a long one smaller, to stay
+ * within its lines, and larger beside the photo on a screen on its side.
+ */
 export function designNameSize(name: string, wide: boolean): number {
   const length = name.trim().length;
-  if (wide) return length <= 22 ? 44 : length <= 40 ? 34 : 28;
-  return length <= 22 ? 32 : length <= 40 ? 26 : 22;
+  if (wide) return length <= 18 ? 60 : length <= 30 ? 50 : 40;
+  return length <= 18 ? 42 : length <= 30 ? 36 : 30;
 }
 
 const PIN = /^\d{4}$/;

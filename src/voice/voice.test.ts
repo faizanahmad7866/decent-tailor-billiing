@@ -69,12 +69,15 @@ describe('voice', () => {
 
   it('speaks for a screen with its own switch, even while switched off', () => {
     const { voice, speech } = fresh(false);
-    const onDone = jest.fn();
-    voice.speakAlways('स्वागत है', onDone);
+    const onEnd = jest.fn();
+    voice.speakAlways('स्वागत है', onEnd);
+    // Over whether said in full, cut off, or failed: the showroom waits on it.
     expect(speech.speak).toHaveBeenCalledWith('स्वागत है', {
       language: 'hi-IN',
       rate: 0.95,
-      onDone,
+      onDone: onEnd,
+      onStopped: onEnd,
+      onError: onEnd,
     });
   });
 

@@ -43,16 +43,21 @@ export function speak(text: string): void {
 
 /**
  * Says `text` whatever the Settings switch says, for a screen with a voice switch
- * of its own (the showroom's welcome). Cuts off what was being said and never
- * throws, as `speak`. `onDone` runs once the line has been said in full, not when
- * it is cut off.
+ * of its own (the showroom). Cuts off what was being said and never throws, as
+ * `speak`. `onEnd` runs once the line is over: said in full, cut off, or failed.
  */
-export function speakAlways(text: string, onDone?: () => void): void {
+export function speakAlways(text: string, onEnd?: () => void): void {
   try {
     void Speech.stop();
-    Speech.speak(text, { language: LANGUAGE, rate: RATE, onDone });
+    Speech.speak(text, {
+      language: LANGUAGE,
+      rate: RATE,
+      onDone: onEnd,
+      onStopped: onEnd,
+      onError: onEnd,
+    });
   } catch {
-    // No voice on this phone: nothing to say it with.
+    // No voice on this phone: nothing to say it with, and nothing to wait for.
   }
 }
 

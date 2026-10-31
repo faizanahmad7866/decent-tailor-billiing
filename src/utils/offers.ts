@@ -10,7 +10,7 @@ export const MAX_OFFERS = 3;
 export const DESIGNS_PER_OFFER = 4;
 
 /** Longer than a design: there is more to read, and it builds up as it appears. */
-export const OFFER_SLIDE_MS = 7000;
+export const OFFER_SLIDE_MS = 8000;
 
 export const OFFER_TITLE_MAX_LENGTH = 24;
 export const OFFER_LINE_MAX_LENGTH = 50;
@@ -97,6 +97,7 @@ export function offerTitleSize(
   height: number
 ): number {
   const length = title.trim().length;
-  const share = length <= 8 ? 0.19 : length <= 14 ? 0.135 : 0.105;
-  return Math.round(Math.min(width * share, height * 0.14, 110));
+  // Set in the serif, whose letters run smaller than Inter's at the same size.
+  const share = length <= 8 ? 0.2 : length <= 14 ? 0.14 : 0.1;
+  return Math.round(Math.min(width * share, height * 0.14, 132));
 }

@@ -137,33 +137,39 @@ const DARK: Palette = {
 /** The colours of the moment: always read here, never kept in a constant. */
 export const COLORS: Palette = { ...LIGHT };
 
-// The showroom is midnight and champagne gold, the colours of a jeweller's window: a
-// black with warmth in it, ivory words, and gold that catches the light. It is the same
-// in either mode, and nothing in it competes with the design's own colours.
+// The showroom is the shop at its best, handed to a customer: a warm black, like an
+// atelier lit at night, ivory words, and the logo's gold kept for what matters — a
+// price, the tab chosen, a design kept. Each design's photo stands on a mat of warm
+// paper, as a print in a gallery does, so a photo taken against a white wall and one
+// cut out on nothing look alike. It is the same in either mode, and nothing in it
+// competes with the designs' own colours.
 export const SHOWROOM = {
-  ground: '#0B0907',
-  text: '#FFF9EC',
-  textMuted: 'rgba(255, 249, 236, 0.68)',
-  line: 'rgba(233, 196, 106, 0.26)',
-  gold: '#E9C46A',
-  goldBright: '#FFE29A',
-  goldDeep: '#B8862B',
-  // The warm spotlight a design stands in.
-  light: '#F3D9A4',
+  ground: '#0F0D0B',
+  // A step up from the ground: a panel, the bar, a card's words.
+  surface: '#191613',
+  surfaceRaised: '#221E1A',
+  line: 'rgba(240, 232, 218, 0.12)',
+  lineStrong: 'rgba(240, 232, 218, 0.26)',
+  // The paper a photo is shown on. A photo is multiplied into it, so its white
+  // becomes the mat's own.
+  mat: '#ECE7DF',
+  text: '#F4EFE6',
+  textMuted: 'rgba(244, 239, 230, 0.66)',
+  textFaint: 'rgba(244, 239, 230, 0.42)',
+  gold: '#D3B27C',
+  goldDeep: '#9C7B45',
+  // What is written on the ivory button.
+  onLight: '#16130F',
+  // Under a control laid over a photo.
+  scrim: 'rgba(15, 13, 11, 0.62)',
+  backdrop: 'rgba(8, 7, 6, 0.78)',
 };
 
-// An offer in the showroom is a poster, near-black and gold, on any phone in either
-// mode, so these do not change with dark mode.
+// An offer is set in the showroom's colours wherever it shows: on the setup page's
+// list, in its preview, and in the showroom itself.
 export const OFFER = {
-  ground: '#0B0907',
-  gold: '#E9C46A',
-  goldBright: '#FFE29A',
-  goldDeep: '#B8862B',
-  goldLine: 'rgba(233, 196, 106, 0.45)',
-  text: '#FFFFFF',
-  textMuted: 'rgba(255, 255, 255, 0.72)',
-  urgent: '#FFCE1B',
-  onUrgent: '#1F2937',
+  ground: SHOWROOM.ground,
+  gold: SHOWROOM.gold,
 };
 
 // Corners are tight — a few pixels, never a capsule — the way business software
@@ -219,6 +225,18 @@ export const FONT = {
   // The heaviest the app goes: anything heavier reads as a poster, not a bill.
   extrabold: 'Inter_700Bold',
 } as const;
+
+// The showroom's display face: a Garamond, for the names of designs and the few
+// words set large, as a couture house sets them. Only in the showroom, never on a
+// bill; from 18 px up, below which its fine strokes fade. Inter Light is for a
+// figure set large there. Loaded with the showroom, not at every start of the
+// app (see useShowroomFonts).
+export const SERIF = {
+  semibold: 'CormorantGaramond_600SemiBold',
+  italic: 'CormorantGaramond_500Medium_Italic',
+} as const;
+
+export const FONT_LIGHT = 'Inter_300Light';
 
 const OVERLINE_TRACKING = 0.5;
 

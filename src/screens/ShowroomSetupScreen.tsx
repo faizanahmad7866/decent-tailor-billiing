@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../components/Button';
 import { OfferPreview } from '../components/pattern/OfferPreview';
 import { OfferSheet } from '../components/pattern/OfferSheet';
+import { useShowroomFonts } from '../components/showroom/useShowroomFonts';
 import { EmptyState } from '../components/EmptyState';
 import { Footer } from '../components/Footer';
 import { KeyboardAwareScroll } from '../components/KeyboardAwareScroll';
@@ -140,6 +141,9 @@ export const ShowroomSetupScreen: React.FC<
   RootScreenProps<'ShowroomSetup'>
 > = ({ navigation }) => {
   const pagePadding = usePagePadding({ footer: true });
+  // The showroom's faces load while the tailor sets it up, ready for the preview
+  // of an offer and for the showroom itself.
+  useShowroomFonts();
   const [categories, setCategories] = useState<ShowroomCategory[] | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [chosen, setChosen] = useState<number[]>([]);
@@ -311,7 +315,7 @@ export const ShowroomSetupScreen: React.FC<
             <SwitchRow
               title={t('Welcome the customer')}
               note={t(
-                'Says “Welcome to Decent Tailor”, then that this is the catalogue'
+                'Welcomes the customer every 2 minutes, and reads out each offer as it shows'
               )}
               value={voice}
               onChange={setVoice}

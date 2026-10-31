@@ -53,10 +53,10 @@ describe('showroomCategories', () => {
 
 describe('showroomSlideMs', () => {
   it('gives a design with more photos longer, up to the three shown', () => {
-    expect(showroomSlideMs(1)).toBe(5000);
-    expect(showroomSlideMs(2)).toBe(5000);
-    expect(showroomSlideMs(3)).toBe(7500);
-    expect(showroomSlideMs(9)).toBe(7500);
+    expect(showroomSlideMs(1)).toBe(6500);
+    expect(showroomSlideMs(2)).toBe(6500);
+    expect(showroomSlideMs(3)).toBe(9000);
+    expect(showroomSlideMs(9)).toBe(9000);
   });
 });
 
