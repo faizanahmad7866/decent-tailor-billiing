@@ -6,11 +6,11 @@ import { createWelcome } from './welcome';
 /** The pause after the greeting before the catalogue is introduced. */
 const PAUSE_MS = 3000;
 /** How long after the welcome ends it is said again, while the showroom runs. */
-const REPEAT_MS = 60_000;
+const REPEAT_MS = 120_000;
 
 /**
  * Greets the customer as the showroom opens, when the tailor switched its voice
- * on at setup, and again a minute after each welcome ends, for whoever walks up
+ * on at setup, and again 2 minutes after each welcome ends, for whoever walks up
  * next. It follows that switch alone, not Settings → Voice, which is for
  * the meters and discount on a bill. Leaving the showroom silences it at once.
  */
