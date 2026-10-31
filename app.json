@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "name": "DT Billing",
+    "slug": "decent-tailor-billing",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/brand/app-icon.png",
+    "plugins": [
+      "expo-sqlite",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "DT Billing uses your photos to show each cloth in the catalog.",
+          "cameraPermission": "DT Billing uses the camera to photograph a cloth for the catalog.",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "DT Billing uses the camera to scan the QR label on a cloth.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/brand/splash-logo.png",
+          "imageWidth": 144,
+          "resizeMode": "contain",
+          "backgroundColor": "#1D1C1A"
+        }
+      ],
+      "expo-font",
+      "expo-sharing",
+      "expo-asset",
+      "expo-video"
+    ],
+    "android": {
+      "package": "com.decenttailor.billing",
+      "allowBackup": false,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/brand/adaptive-foreground.png",
+        "monochromeImage": "./assets/brand/adaptive-monochrome.png",
+        "backgroundColor": "#FFFFFF",
+        "backgroundImage": "./assets/brand/adaptive-background.png"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.decenttailor.billing",
+      "supportsTablet": true
+    }
+  }
+}
