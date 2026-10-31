@@ -387,13 +387,19 @@ remembered, so closing the app also ends it.
 
 **Voice** (on the same setup page, beside Price, and like it chosen afresh each time):
 as the showroom opens it says “डीसेंट टेलर में आपका स्वागत है”, and 3 seconds after that
-line ends, “यह हमारा कैटलॉग है, इसमें आप सारे डिज़ाइन देख सकते हैं”
-— and says both again 2 minutes after the second ends, for as long as the showroom
-runs, so a customer who walks up later is welcomed too. The slides never wait for it
-(`voice/useShowroomWelcome.ts`, `voice/welcome.ts`, the lines in `voice/spokenText.ts`).
-It is the same phone voice as the bill's (`expo-speech`, `hi-IN`), but follows this
-switch alone, not Settings → Voice. Leaving the showroom stops it mid-word and drops
-the line or round still to come; a tap that skips the intro does not.
+line ends, “यह हमारा कैटलॉग है, इसमें आप सारे डिज़ाइन देख सकते हैं” — and says both again
+2 minutes after the second ends, for as long as the showroom runs, so a customer who
+walks up later is welcomed too. As an offer's poster comes up it is read out: the
+occasion, the offer, its line and its last day — “ईद ऑफर। 10 परसेंट डिस्काउंट। ऑन ऑल
+जोधपुरी सूट्स। यह ऑफर 15 नवंबर तक है” (`voice/spokenOffer.ts`: offer words, ₹ and %
+put into Devanagari to be said as the counter says them, not translated; “today” and
+“tomorrow” for the last two days). It is one voice (`voice/narrator.ts`): an offer cuts
+in, since it is about what is on screen, and a welcome line it cuts off is said again
+whole 3 seconds after; the 2-minute round keeps its time. The slides never wait for it.
+It is the same phone voice as the bill's (`expo-speech`, `hi-IN`, through
+`voice/useShowroomVoice.ts`), but follows this switch alone, not Settings → Voice.
+Leaving the showroom stops it mid-word and drops whatever was still to come; a tap
+that skips the intro does not.
 
 **Offers** (on the same setup page, up to 3) run in the showroom as posters between the
 designs, one after every 4, for 7 seconds (`utils/offers.ts`, `pattern/OfferSlide.tsx`):

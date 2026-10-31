@@ -59,7 +59,8 @@ import {
   showroomSlideMs,
   showroomSlides,
 } from '../utils/showroom';
-import { useShowroomWelcome } from '../voice/useShowroomWelcome';
+import { spokenOffer } from '../voice/spokenOffer';
+import { useShowroomVoice } from '../voice/useShowroomVoice';
 
 const logo = require('../../assets/brand/logo-gold.png');
 const logoSource = Image.resolveAssetSource(logo);
@@ -96,7 +97,7 @@ export const ShowroomScreen: React.FC<RootScreenProps<'Showroom'>> = ({
 }) => {
   useKeepAwake();
   const { categoryIds, showPrice, voice, pin } = route.params;
-  useShowroomWelcome(voice);
+  const { announce } = useShowroomVoice(voice);
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const list = useAnimatedRef<FlatList<Slide>>();
@@ -189,6 +190,15 @@ export const ShowroomScreen: React.FC<RootScreenProps<'Showroom'>> = ({
   const designNumber = slides
     .slice(0, index + 1)
     .filter((slide) => slide.kind === 'design').length;
+
+  // An offer is read out as its poster comes up, once each time it does.
+  const offerKey = introDone && onOffer ? current.key : null;
+  useEffect(() => {
+    if (offerKey && current?.kind === 'offer') {
+      announce(spokenOffer(current.offer));
+    }
+    // Only a new poster coming up is worth saying, not anything else changing.
+  }, [offerKey]);
 
   const paused = !introDone || dragging || viewing !== null || leaving;
   const slideMs =
