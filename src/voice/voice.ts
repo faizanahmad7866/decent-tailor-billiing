@@ -38,10 +38,19 @@ export function setVoiceEnabled(on: boolean): void {
  * voice must not get in the way of a bill.
  */
 export function speak(text: string): void {
-  if (!enabled) return;
+  if (enabled) speakAlways(text);
+}
+
+/**
+ * Says `text` whatever the Settings switch says, for a screen with a voice switch
+ * of its own (the showroom's welcome). Cuts off what was being said and never
+ * throws, as `speak`. `onDone` runs once the line has been said in full, not when
+ * it is cut off.
+ */
+export function speakAlways(text: string, onDone?: () => void): void {
   try {
     void Speech.stop();
-    Speech.speak(text, { language: LANGUAGE, rate: RATE });
+    Speech.speak(text, { language: LANGUAGE, rate: RATE, onDone });
   } catch {
     // No voice on this phone: nothing to say it with.
   }

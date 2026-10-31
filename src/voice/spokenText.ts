@@ -28,3 +28,13 @@ export function spokenDiscount(discount: Discount | null): string | null {
 
 /** Said when the voice is switched on, so the tailor hears it works. */
 export const VOICE_ON_LINE = 'आवाज़ चालू है';
+
+/**
+ * The showroom's welcome, when the tailor turns its voice on: the greeting as it
+ * opens, then the catalogue (`voice/welcome.ts`). The shop's name is in
+ * Devanagari so the Hindi voice says it rather than spelling it out.
+ */
+export const SHOWROOM_WELCOME_LINES = [
+  'डीसेंट टेलर में आपका स्वागत है',
+  'यह हमारा कैटलॉग है, इसमें आप सारे डिज़ाइन देख सकते हैं',
+] as const;

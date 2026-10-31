@@ -713,12 +713,16 @@ export const HINDI: Record<string, string> = {
   'Only {0} days left': 'सिर्फ {0} दिन बाकी',
   'Ask at the counter': 'काउंटर पर पूछें',
   Price: 'कीमत',
+  Voice: 'आवाज़',
   'What to show': 'क्या दिखाना है',
   'Only designs with a photo are shown': 'सिर्फ फोटो वाले डिज़ाइन दिखेंगे',
   'All designs': 'सभी डिज़ाइन',
   'Show the price': 'कीमत दिखाएं',
   'Off: the customer sees the designs, and you tell the price':
     'बंद: ग्राहक डिज़ाइन देखेगा, कीमत आप बताएंगे',
+  'Welcome the customer': 'ग्राहक का स्वागत करें',
+  'Says “Welcome to Decent Tailor”, then that this is the catalogue':
+    'बोलेगा “डीसेंट टेलर में आपका स्वागत है”, फिर बताएगा कि यह कैटलॉग है',
   'Leaving the showroom': 'शोरूम से बाहर निकलना',
   '{0}-digit PIN': '{0} अंकों का PIN',
   'Enter a {0}-digit PIN': '{0} अंकों का PIN लिखें',
